@@ -49,6 +49,19 @@ def render_status_badge(status: str) -> None:
     st.markdown(f"`Status: {label}`")
 
 
+def render_page_link(page_path: str, label: str) -> None:
+    """Render a page link, falling back to plain text outside the app.
+
+    ``st.page_link`` requires the page to be registered by the app's
+    navigation. When the page runs standalone (e.g. in tests) it degrades to a
+    caption so the app never crashes.
+    """
+    try:
+        st.page_link(page_path, label=label)
+    except KeyError:
+        st.caption(f"{label} (use the sidebar navigation)")
+
+
 def render_module_card(module: Module) -> None:
     """Render a single module card with description and navigation link.
 
@@ -59,12 +72,7 @@ def render_module_card(module: Module) -> None:
         st.markdown(f"### {module.title}")
         st.caption(module.subtitle)
         st.markdown(module.description)
-        try:
-            # Resolves when the page is registered by the app's navigation.
-            st.page_link(module.file, label=f"Open {module.title}")
-        except KeyError:
-            # Standalone execution (e.g. tests) has no navigation registry.
-            st.caption(f"Open {module.title} from the sidebar.")
+        render_page_link(module.file, label=f"Open {module.title}")
 
 
 def render_module_grid(modules: list[Module], columns: int = 2) -> None:

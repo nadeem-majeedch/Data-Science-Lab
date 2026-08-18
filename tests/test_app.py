@@ -103,6 +103,51 @@ def test_dataset_explorer_loads_sample_dataset():
     assert app.session_state["dataset_name"] == "student_grades.csv"
 
 
+def test_eda_renders_without_dataset():
+    app = _run_app(PAGES_DIR / "2_EDA.py")
+    assert not app.exception, app.exception
+    assert app.title[0].value == "EDA"
+    assert not app.metric
+
+
+def test_eda_renders_with_dataset():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "2_EDA.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    assert not app.exception, app.exception
+    assert len(app.metric) == 4  # automatic EDA summary metrics
+    assert app.get("plotly_chart"), "expected an interactive histogram"
+
+
+def test_eda_categorical_bar_chart_interaction():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "2_EDA.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    app.selectbox(key="eda_area").set_value("Categorical")
+    app.run()
+
+    app.selectbox(key="eda_cat_chart").set_value("Bar chart")
+    app.selectbox(key="eda_cat_x").set_value("subject")
+    app.selectbox(key="eda_cat_y").set_value("final")
+    app.selectbox(key="eda_cat_agg").set_value("mean")
+    app.run()
+
+    assert not app.exception, app.exception
+    assert app.get("plotly_chart"), "expected a bar chart after interaction"
+
+
 def test_utils_render_placeholder():
     def build_test_page():
         from utils.placeholder import render_placeholder

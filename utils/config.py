@@ -109,6 +109,7 @@ MODULES: list[Module] = [
         ],
         section="Data Understanding",
         file="pages/2_EDA.py",
+        status="implemented",
         help_text=(
             "Choose a dataset and the chart types you want. The visualizations "
             "update automatically as you change the options."

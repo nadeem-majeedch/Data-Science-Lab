@@ -165,3 +165,69 @@ def data_quality_score(df: pd.DataFrame) -> float:
     if df.shape[0] * df.shape[1] == 0:
         return 0.0
     return float(1 - df.isna().sum().sum() / (df.shape[0] * df.shape[1]))
+
+
+# EDA-specific helpers --------------------------------------------------------
+
+HIGH_CARDINALITY_THRESHOLD = 50
+
+
+def top_correlations(df: pd.DataFrame, k: int = 10) -> pd.DataFrame:
+    """Return the strongest absolute Pearson correlations between numeric columns.
+
+    Returns a DataFrame with ``Column A``, ``Column B`` and ``Correlation``,
+    sorted by absolute correlation descending, excluding self-pairs. Only
+    columns with at least two paired non-null values are considered.
+    """
+    numeric = df.select_dtypes(include=["number"])
+    if numeric.shape[1] < 2:
+        return pd.DataFrame(columns=["Column A", "Column B", "Correlation"])
+
+    corr = numeric.corr(numeric_only=True)
+    pairs = []
+    for i, col_a in enumerate(corr.columns):
+        for col_b in corr.columns[i + 1 :]:
+            value = corr.loc[col_a, col_b]
+            if pd.isna(value):
+                continue
+            pairs.append({"Column A": col_a, "Column B": col_b, "Correlation": value})
+    if not pairs:
+        return pd.DataFrame(columns=["Column A", "Column B", "Correlation"])
+
+    ranked = pd.DataFrame(pairs).reindex(
+        columns=["Column A", "Column B", "Correlation"]
+    )
+    ranked["Abs"] = ranked["Correlation"].abs()
+    ranked = ranked.sort_values("Abs", ascending=False).head(k)
+    return ranked.drop(columns=["Abs"]).reset_index(drop=True)
+
+
+def eda_summary(df: pd.DataFrame) -> dict:
+    """Return a compact automatic EDA summary of the dataset.
+
+    The returned dict contains high-level facts computed from the data. These
+    are neutral observations for educational use, not conclusions about any
+    real-world question.
+    """
+    missing_total = int(df.isna().sum().sum())
+    total_cells = df.shape[0] * df.shape[1]
+    high_cardinality = [
+        column
+        for column in df.columns
+        if str(df[column].dtype) in ("object", "category")
+        and df[column].nunique() > HIGH_CARDINALITY_THRESHOLD
+    ]
+    return {
+        "rows": len(df),
+        "columns": len(df.columns),
+        "missing_cells": missing_total,
+        "missing_cells_pct": round(missing_total / total_cells * 100, 2)
+        if total_cells
+        else 0.0,
+        "duplicate_rows": duplicate_rows(df),
+        "numeric_columns": len(numeric_columns(df)),
+        "categorical_columns": len(categorical_columns(df)),
+        "constant_columns": constant_columns(df),
+        "high_cardinality_columns": high_cardinality,
+        "dtypes": {column: str(dtype) for column, dtype in df.dtypes.items()},
+    }

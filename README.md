@@ -25,8 +25,12 @@ clean web interface. The app doubles as a teaching aid for instructors.
   sample datasets, inspect structure, preview rows (head/tail/sample), explore
   numeric and categorical statistics, run data-quality checks, and download
   the dataset
+- **EDA** (implemented): automatic EDA summary plus interactive Plotly charts
+  for numeric (histogram, box, density, scatter, correlation) and categorical
+  (bar, frequency distribution, count plot) columns, missing-value and
+  pairwise analysis, with an interpretation section that clearly labels
+  automatically generated observations as educational hints
 - Placeholder modules for the rest of the learning roadmap:
-  - EDA (Exploratory Data Analysis)
   - Data Preprocessing
   - Feature Engineering
   - Classification
@@ -102,6 +106,7 @@ Data-Science-Lab/
 │   ├── session.py         # Session-state helpers for the active dataset
 │   ├── data_loader.py     # CSV / Excel loading (uploads + samples)
 │   ├── data_analysis.py   # Pure dataset analysis functions
+│   ├── visualization.py   # Plotly chart builders + interpretation hints
 │   └── placeholder.py     # Backwards-compatible placeholder helper
 ├── datasets/              # Data files (large files git-ignored)
 │   └── samples/           # Bundled sample datasets (CSV + XLSX)
@@ -126,7 +131,7 @@ Data-Science-Lab/
 
 1. **Foundation** (done): landing page, structure, and placeholders.
 2. **Dataset Explorer** (done): upload, preview, statistics, data quality.
-3. **EDA**: interactive visualizations to explore datasets.
+3. **EDA** (done): interactive visualizations to explore datasets.
 4. **Preprocessing + Feature Engineering**: cleaning, encoding, scaling.
 5. **Modeling modules**: classification, regression, clustering.
 6. **Evaluation + Comparison + AutoML**: metrics, ranking, automated search.
