@@ -1,22 +1,8 @@
-"""Regression placeholder module."""
+"""Regression module."""
 
-import streamlit as st
+from utils import get_module, render_module_placeholder, render_page_sidebar
 
-from utils import render_placeholder
+_MODULE = get_module("Regression")
 
-st.set_page_config(page_title="Regression", layout="wide")
-
-render_placeholder(
-    title="Regression",
-    description=(
-        "Model continuous numeric outcomes, such as house prices or sales "
-        "forecasts, with interpretable and powerful regressors."
-    ),
-    planned_features=[
-        "Continuous target variable support",
-        "Common regressors: linear, ridge, trees, ensembles",
-        "Residual analysis and prediction plots",
-        "Train / validation / test evaluation",
-    ],
-    related_page="Classification",
-)
+render_page_sidebar(_MODULE)
+render_module_placeholder(_MODULE)

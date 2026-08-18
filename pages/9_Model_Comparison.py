@@ -1,22 +1,8 @@
-"""Model Comparison placeholder module."""
+"""Model Comparison module."""
 
-import streamlit as st
+from utils import get_module, render_module_placeholder, render_page_sidebar
 
-from utils import render_placeholder
+_MODULE = get_module("Model Comparison")
 
-st.set_page_config(page_title="Model Comparison", layout="wide")
-
-render_placeholder(
-    title="Model Comparison",
-    description=(
-        "Train several models side by side and rank them on a shared evaluation "
-        "framework to pick the best approach."
-    ),
-    planned_features=[
-        "Run multiple models on the same dataset",
-        "Side-by-side metric comparison table",
-        "Bars and box plots of performance",
-        "Ranking with best model export",
-    ],
-    related_page="Model Evaluation",
-)
+render_page_sidebar(_MODULE)
+render_module_placeholder(_MODULE)

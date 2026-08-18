@@ -21,7 +21,6 @@ ENV/
 
 # Streamlit
 .streamlit/secrets.toml
-.streamlit/config.toml
 
 # Jupyter
 .ipynb_checkpoints/

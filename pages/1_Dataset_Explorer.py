@@ -1,23 +1,8 @@
-"""Dataset Explorer placeholder module."""
+"""Dataset Explorer module."""
 
-import streamlit as st
+from utils import get_module, render_module_placeholder, render_page_sidebar
 
-from utils import render_placeholder
+_MODULE = get_module("Dataset Explorer")
 
-st.set_page_config(page_title="Dataset Explorer", layout="wide")
-
-render_placeholder(
-    title="Dataset Explorer",
-    description=(
-        "Browse, preview, and inspect datasets used in the lab before any "
-        "analysis or modeling begins."
-    ),
-    planned_features=[
-        "Upload datasets (CSV, Excel, JSON)",
-        "Preview the first rows with schema inference",
-        "Column-level statistics and data types",
-        "Missing value and duplicate overview",
-        "Quick filtering and sorting controls",
-    ],
-    related_page="EDA",
-)
+render_page_sidebar(_MODULE)
+render_module_placeholder(_MODULE)
