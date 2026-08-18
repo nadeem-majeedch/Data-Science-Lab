@@ -68,16 +68,39 @@ def test_every_page_renders_without_errors():
 
 
 def test_placeholder_pages_share_consistent_header():
-    for page in sorted(PAGES_DIR.glob("*.py")):
-        if page.name == "Home.py":
+    from utils import MODULES
+
+    for module in MODULES:
+        if module.key == "home" or module.status != "planned":
             continue
-        app = _run_app(page)
-        assert app.title, f"{page.name} rendered no page title"
-        assert app.markdown, f"{page.name} rendered no subtitle/description"
+        app = _run_app(PROJECT_ROOT / module.file)
+        assert app.title, f"{module.file} rendered no page title"
+        assert app.markdown, f"{module.file} rendered no subtitle/description"
         assert any(
             el.value.startswith("What you will learn")
             for el in app.subheader
-        ), f"{page.name} is missing the learning outcomes section"
+        ), f"{module.file} is missing the learning outcomes section"
+
+
+def test_dataset_explorer_renders_without_dataset():
+    app = _run_app(PAGES_DIR / "1_Dataset_Explorer.py")
+    assert not app.exception, app.exception
+    assert app.title[0].value == "Dataset Explorer"
+    assert not app.metric  # no metrics until a dataset is loaded
+
+
+def test_dataset_explorer_loads_sample_dataset():
+    app = _run_app(PAGES_DIR / "1_Dataset_Explorer.py")
+
+    app.radio[0].set_value("Sample dataset")
+    app.selectbox[0].select("student_grades.csv")
+    app.button[0].click()
+    app.run()
+
+    assert not app.exception, app.exception
+    assert app.metric, "expected overview metrics after loading a dataset"
+    assert len(app.dataframe) >= 2  # overview table + full dataset + more
+    assert app.session_state["dataset_name"] == "student_grades.csv"
 
 
 def test_utils_render_placeholder():

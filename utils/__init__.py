@@ -14,6 +14,7 @@ from utils.config import (
 )
 from utils.navigation import build_navigation
 from utils.ui import (
+    render_education,
     render_module_card,
     render_module_grid,
     render_module_placeholder,
@@ -37,6 +38,7 @@ __all__ = [
     "NAV_SECTIONS",
     "get_module",
     "build_navigation",
+    "render_education",
     "render_module_card",
     "render_module_grid",
     "render_module_placeholder",

@@ -85,6 +85,7 @@ MODULES: list[Module] = [
         ],
         section="Data Understanding",
         file="pages/1_Dataset_Explorer.py",
+        status="implemented",
         help_text=(
             "Pick a dataset file, then use the preview and summary views to "
             "understand what you are working with before moving on."

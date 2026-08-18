@@ -1,0 +1,123 @@
+student_id,name,subject,semester,attendance_pct,midterm,final,grade,notes
+S001,Student 01,Mathematics,2026-1,,90.0,57.0,C,Excellent
+S002,Student 02,Machine Learning,2026-1,76.2,93.0,89.0,A,Good
+S003,Student 03,Programming,2026-1,80.4,53.0,55.0,F,Needs help
+S004,Student 04,Statistics,2026-1,89.4,93.0,87.0,B,Needs help
+S005,Student 05,Statistics,2026-1,,46.0,67.0,F,nan
+S006,Student 06,Machine Learning,2026-1,79.9,71.0,53.0,D,Needs help
+S007,Student 07,Mathematics,2026-1,,68.0,,D,Needs help
+S008,Student 08,Programming,2026-1,68.7,58.0,71.0,D,Excellent
+S009,Student 09,Mathematics,2026-1,56.4,41.0,85.0,D,Good
+S010,Student 10,Mathematics,2026-1,74.7,86.0,76.0,B,Good
+S011,Student 11,Programming,2026-1,64.7,60.0,95.0,C,Needs help
+S012,Student 12,Machine Learning,2026-1,73.4,79.0,92.0,B,Needs help
+S013,Student 13,Programming,2026-1,93.4,64.0,85.0,C,Good
+S014,Student 14,Machine Learning,2026-1,65.5,62.0,76.0,D,Needs help
+S015,Student 15,Programming,2026-1,57.6,93.0,57.0,C,Needs help
+S016,Student 16,Machine Learning,2026-1,67.7,45.0,64.0,F,Needs help
+S017,Student 17,Programming,2026-1,68.2,84.0,47.0,D,Needs help
+S018,Student 18,Mathematics,2026-1,84.8,84.0,62.0,C,Excellent
+S019,Student 19,Machine Learning,2026-1,,62.0,95.0,C,Good
+S020,Student 20,Statistics,2026-1,90.3,55.0,65.0,F,nan
+S021,Student 21,Programming,2026-1,84.9,40.0,46.0,F,nan
+S022,Student 22,Statistics,2026-1,73.3,96.0,79.0,B,Needs help
+S023,Student 23,Mathematics,2026-1,91.6,96.0,97.0,A,Needs help
+S024,Student 24,Machine Learning,2026-1,62.5,54.0,92.0,C,Needs help
+S025,Student 25,Machine Learning,2026-1,56.0,41.0,56.0,F,nan
+S026,Student 26,Programming,2026-1,59.1,47.0,67.0,F,Excellent
+S027,Student 27,Statistics,2026-1,87.5,44.0,71.0,F,nan
+S028,Student 28,Machine Learning,2026-1,75.8,89.0,54.0,C,Needs help
+S029,Student 29,Programming,2026-1,62.3,93.0,,C,Excellent
+S030,Student 30,Statistics,2026-1,77.5,49.0,54.0,F,Good
+S031,Student 31,Statistics,2026-1,61.9,84.0,99.0,A,Excellent
+S032,Student 32,Mathematics,2026-1,86.3,50.0,84.0,D,Good
+S033,Student 33,Mathematics,2026-1,,62.0,90.0,C,Excellent
+S034,Student 34,Programming,2026-1,72.1,75.0,88.0,B,nan
+S035,Student 35,Machine Learning,2026-1,68.6,83.0,97.0,B,Good
+S036,Student 36,Mathematics,2026-1,83.4,92.0,46.0,D,Excellent
+S037,Student 37,Machine Learning,2026-1,71.3,42.0,92.0,D,Good
+S038,Student 38,Machine Learning,2026-1,58.9,51.0,43.0,F,Excellent
+S039,Student 39,Statistics,2026-1,60.3,56.0,68.0,D,Good
+S040,Student 40,Programming,2026-1,98.3,58.0,75.0,D,nan
+S041,Student 41,Mathematics,2026-1,95.9,99.0,61.0,C,Good
+S042,Student 42,Machine Learning,2026-1,86.5,86.0,48.0,D,nan
+S043,Student 43,Programming,2026-1,67.0,59.0,51.0,F,nan
+S044,Student 44,Statistics,2026-1,98.6,98.0,89.0,A,Needs help
+S045,Student 45,Mathematics,2026-1,90.0,69.0,59.0,D,Excellent
+S046,Student 46,Machine Learning,2026-1,87.3,70.0,58.0,D,Excellent
+S047,Student 47,Statistics,2026-1,75.2,66.0,95.0,B,nan
+S048,Student 48,Machine Learning,2026-1,67.3,48.0,48.0,F,Good
+S049,Student 49,Programming,2026-1,59.3,96.0,94.0,A,Needs help
+S050,Student 50,Machine Learning,2026-1,95.6,40.0,95.0,D,Good
+S051,Student 51,Machine Learning,2026-1,75.5,50.0,75.0,D,Excellent
+S052,Student 52,Mathematics,2026-1,64.1,53.0,49.0,F,Good
+S053,Student 53,Statistics,2026-1,68.8,56.0,49.0,F,Needs help
+S054,Student 54,Statistics,2026-1,81.1,47.0,57.0,F,Needs help
+S055,Student 55,Statistics,2026-1,63.0,41.0,74.0,F,Needs help
+S056,Student 56,Mathematics,2026-1,93.5,80.0,49.0,D,Needs help
+S057,Student 57,Programming,2026-1,89.1,98.0,67.0,B,Excellent
+S058,Student 58,Mathematics,2026-1,87.4,47.0,46.0,F,Excellent
+S059,Student 59,Programming,2026-1,74.4,57.0,72.0,D,Needs help
+S060,Student 60,Programming,2026-1,83.2,70.0,41.0,F,Needs help
+S061,Student 61,Machine Learning,2026-1,81.3,95.0,82.0,B,nan
+S062,Student 62,Programming,2026-1,84.2,81.0,43.0,D,Good
+S063,Student 63,Statistics,2026-1,58.8,85.0,51.0,D,Good
+S064,Student 64,Machine Learning,2026-1,73.7,74.0,50.0,D,Good
+S065,Student 65,Statistics,2026-1,56.9,65.0,89.0,C,Excellent
+S066,Student 66,Statistics,2026-1,77.2,51.0,43.0,F,Needs help
+S067,Student 67,Machine Learning,2026-1,69.8,91.0,65.0,C,Excellent
+S068,Student 68,Statistics,2026-1,61.5,88.0,75.0,B,Excellent
+S069,Student 69,Mathematics,2026-1,59.7,41.0,70.0,F,Needs help
+S070,Student 70,Statistics,2026-1,81.4,82.0,80.0,B,nan
+S071,Student 71,Machine Learning,2026-1,62.7,45.0,88.0,D,Excellent
+S072,Student 72,Mathematics,2026-1,96.6,84.0,63.0,C,Good
+S073,Student 73,Statistics,2026-1,81.1,89.0,89.0,B,Needs help
+S074,Student 74,Mathematics,2026-1,70.6,47.0,59.0,F,Needs help
+S075,Student 75,Programming,2026-1,,66.0,99.0,B,Good
+S076,Student 76,Statistics,2026-1,56.0,47.0,70.0,F,Good
+S077,Student 77,Statistics,2026-1,98.1,74.0,84.0,C,nan
+S078,Student 78,Mathematics,2026-1,76.7,95.0,92.0,A,Needs help
+S079,Student 79,Programming,2026-1,90.2,44.0,87.0,D,Needs help
+S080,Student 80,Programming,2026-1,58.7,63.0,,C,Excellent
+S081,Student 81,Machine Learning,2026-1,76.9,98.0,72.0,B,Needs help
+S082,Student 82,Statistics,2026-1,77.1,58.0,42.0,F,nan
+S083,Student 83,Mathematics,2026-1,97.2,47.0,69.0,,Excellent
+S084,Student 84,Machine Learning,2026-1,80.7,69.0,50.0,F,Needs help
+S085,Student 85,Programming,2026-1,76.3,70.0,93.0,B,Needs help
+S086,Student 86,Programming,2026-1,67.0,79.0,54.0,D,nan
+S087,Student 87,Mathematics,2026-1,69.9,58.0,53.0,F,Excellent
+S088,Student 88,Statistics,2026-1,78.4,97.0,54.0,C,nan
+S089,Student 89,Machine Learning,2026-1,74.8,71.0,78.0,C,Good
+S090,Student 90,Machine Learning,2026-1,56.0,57.0,74.0,D,nan
+S091,Student 91,Statistics,2026-1,92.2,97.0,96.0,A,Excellent
+S092,Student 92,Machine Learning,2026-1,95.3,95.0,64.0,C,Good
+S093,Student 93,Machine Learning,2026-1,61.3,69.0,56.0,D,Needs help
+S094,Student 94,Statistics,2026-1,79.9,41.0,42.0,F,Excellent
+S095,Student 95,Machine Learning,2026-1,59.9,75.0,40.0,F,Good
+S096,Student 96,Statistics,2026-1,85.3,73.0,62.0,D,Needs help
+S097,Student 97,Mathematics,2026-1,67.7,48.0,,C,nan
+S098,Student 98,Programming,2026-1,84.7,78.0,71.0,,Good
+S099,Student 99,Programming,2026-1,87.7,90.0,,,Needs help
+S100,Student 100,Mathematics,2026-1,89.6,46.0,46.0,F,Needs help
+S101,Student 101,Machine Learning,2026-1,59.8,83.0,45.0,,Needs help
+S102,Student 102,Mathematics,2026-1,96.2,48.0,90.0,D,nan
+S103,Student 103,Machine Learning,2026-1,65.4,84.0,46.0,D,Excellent
+S104,Student 104,Mathematics,2026-1,56.7,65.0,43.0,F,Good
+S105,Student 105,Machine Learning,2026-1,,40.0,64.0,F,nan
+S106,Student 106,Machine Learning,2026-1,71.7,97.0,95.0,A,nan
+S107,Student 107,Machine Learning,2026-1,92.3,49.0,81.0,D,Good
+S108,Student 108,Programming,2026-1,91.4,75.0,45.0,F,nan
+S109,Student 109,Statistics,2026-1,69.3,50.0,90.0,D,Good
+S110,Student 110,Programming,2026-1,97.9,95.0,90.0,A,nan
+S111,Student 111,Statistics,2026-1,68.1,84.0,88.0,B,Excellent
+S112,Student 112,Machine Learning,2026-1,78.2,88.0,94.0,A,Excellent
+S113,Student 113,Programming,2026-1,66.5,65.0,54.0,F,Good
+S114,Student 114,Statistics,2026-1,97.1,68.0,98.0,B,nan
+S115,Student 115,Programming,2026-1,62.4,78.0,59.0,D,Good
+S116,Student 116,Programming,2026-1,57.0,87.0,88.0,B,Good
+S117,Student 117,Mathematics,2026-1,74.6,90.0,74.0,B,Good
+S118,Student 118,Mathematics,2026-1,,41.0,86.0,D,Excellent
+S119,Student 119,Mathematics,2026-1,95.1,79.0,77.0,C,Good
+S120,Student 120,Mathematics,2026-1,88.7,46.0,78.0,D,nan
+S001,Student 01,Mathematics,2026-1,,90.0,57.0,C,Excellent
+S002,Student 02,Machine Learning,2026-1,76.2,93.0,89.0,A,Good

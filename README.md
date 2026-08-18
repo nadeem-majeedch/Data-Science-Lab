@@ -21,8 +21,11 @@ clean web interface. The app doubles as a teaching aid for instructors.
 - Professional landing page tailored for BS Data Science students
 - Sidebar navigation powered by Streamlit's multipage structure
 - Modular, readable codebase split into `pages/`, `utils/`, and `datasets/`
-- Placeholder modules for the entire learning roadmap:
-  - Dataset Explorer
+- **Dataset Explorer** (implemented): upload CSV/Excel files or load bundled
+  sample datasets, inspect structure, preview rows (head/tail/sample), explore
+  numeric and categorical statistics, run data-quality checks, and download
+  the dataset
+- Placeholder modules for the rest of the learning roadmap:
   - EDA (Exploratory Data Analysis)
   - Data Preprocessing
   - Feature Engineering
@@ -32,6 +35,7 @@ clean web interface. The app doubles as a teaching aid for instructors.
   - Clustering
   - Model Comparison
   - AutoML
+- Educational explanations embedded in every analysis section
 - Smoke tests that verify every page renders without errors
 
 ## Installation
@@ -92,13 +96,21 @@ Data-Science-Lab/
 │   └── 10_AutoML.py
 ├── utils/                 # Shared helpers and app configuration
 │   ├── __init__.py
-│   ├── config.py          # App constants and page registry
-│   └── placeholder.py     # Reusable placeholder layout component
+│   ├── config.py          # App constants and module registry
+│   ├── navigation.py      # Grouped sidebar navigation builder
+│   ├── ui.py              # Reusable UI components
+│   ├── session.py         # Session-state helpers for the active dataset
+│   ├── data_loader.py     # CSV / Excel loading (uploads + samples)
+│   ├── data_analysis.py   # Pure dataset analysis functions
+│   └── placeholder.py     # Backwards-compatible placeholder helper
 ├── datasets/              # Data files (large files git-ignored)
+│   └── samples/           # Bundled sample datasets (CSV + XLSX)
 ├── notebooks/             # Jupyter notebooks for exploratory work
 ├── reports/               # Generated reports and exports
 └── tests/                 # Smoke tests
-    └── test_app.py
+    ├── test_app.py
+    ├── test_data_loader.py
+    └── test_data_analysis.py
 ```
 
 ## Intended audience
@@ -112,11 +124,12 @@ Data-Science-Lab/
 
 ## Roadmap
 
-1. **Foundation** (current): landing page, structure, and placeholders.
-2. **Dataset Explorer + EDA**: upload, preview, and visualize datasets.
-3. **Preprocessing + Feature Engineering**: cleaning, encoding, scaling.
-4. **Modeling modules**: classification, regression, clustering.
-5. **Evaluation + Comparison + AutoML**: metrics, ranking, automated search.
+1. **Foundation** (done): landing page, structure, and placeholders.
+2. **Dataset Explorer** (done): upload, preview, statistics, data quality.
+3. **EDA**: interactive visualizations to explore datasets.
+4. **Preprocessing + Feature Engineering**: cleaning, encoding, scaling.
+5. **Modeling modules**: classification, regression, clustering.
+6. **Evaluation + Comparison + AutoML**: metrics, ranking, automated search.
 
 ## License
 

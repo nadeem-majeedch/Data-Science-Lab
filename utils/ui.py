@@ -32,6 +32,17 @@ def render_page_footer() -> None:
     st.caption(f"{APP_TITLE} - an educational tool for BS Data Science students")
 
 
+def render_education(title: str, body: str) -> None:
+    """Render a collapsible educational explanation block.
+
+    Args:
+        title: Short label for the explainer (e.g. "Missing values").
+        body: Markdown text explaining the concept and why it matters.
+    """
+    with st.expander(f"Learn more: {title}"):
+        st.markdown(body)
+
+
 def render_status_badge(status: str) -> None:
     """Render a small text badge describing the module's build status."""
     label = status.replace("_", " ").title()
