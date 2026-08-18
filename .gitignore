@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+*.so
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables
+.env
+.env.*
+
+# Streamlit
+.streamlit/secrets.toml
+.streamlit/config.toml
+
+# Jupyter
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+.truststore/
+jupyter_execute.ipynb
+
+# Testing / tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+
+# Datasets and generated artifacts
+datasets/*.csv
+datasets/*.parquet
+datasets/*.xlsx
+datasets/*.json
+datasets/*.zip
+notebooks/*.ipynb_checkpoints/
+reports/*.html
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.log
