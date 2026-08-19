@@ -132,6 +132,7 @@ MODULES: list[Module] = [
         ],
         section="Data Preparation",
         file="pages/3_Data_Preprocessing.py",
+        status="implemented",
         help_text=(
             "Follow the steps from top to bottom: clean, transform, then split. "
             "Each step previews its effect on the data."

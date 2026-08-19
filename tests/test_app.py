@@ -148,6 +148,66 @@ def test_eda_categorical_bar_chart_interaction():
     assert app.get("plotly_chart"), "expected a bar chart after interaction"
 
 
+def test_preprocessing_renders_without_dataset():
+    app = _run_app(PAGES_DIR / "3_Data_Preprocessing.py")
+    assert not app.exception, app.exception
+    assert app.title[0].value == "Data Preprocessing"
+    assert not app.metric
+
+
+def test_preprocessing_renders_with_dataset():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "3_Data_Preprocessing.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    assert not app.exception, app.exception
+    assert len(app.metric) == 4  # headline quality metrics
+    assert app.session_state["dataset_name"] == "student_grades.csv"
+
+
+def test_preprocessing_workflow_stores_preprocessor_and_split():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "3_Data_Preprocessing.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    # Pass 1: enable the learned steps plus the split.
+    for key in (
+        "pp_missing_enabled",
+        "pp_enc_enabled",
+        "pp_scale_enabled",
+        "pp_split_enabled",
+    ):
+        app.checkbox(key=key).set_value(True)
+    app.run()
+
+    # Pass 2: configure the now-visible widgets.
+    app.selectbox(key="pp_missing_strategy").set_value("median")
+    app.multiselect(key="pp_missing_cols").set_value(["attendance_pct", "final"])
+    app.multiselect(key="pp_enc_cols").set_value(["subject"])
+    app.multiselect(key="pp_scale_cols").set_value(["midterm", "final"])
+    app.selectbox(key="pp_split_target").set_value("grade")
+    app.run()
+
+    assert not app.exception, app.exception
+    assert app.session_state["train_test_split"] is not None
+    split = app.session_state["train_test_split"]
+    assert len(split["X_train"]) > 0 and len(split["X_test"]) > 0
+    preprocessor = app.session_state["preprocessor"]
+    assert preprocessor is not None
+    names = [name for name, _, _ in preprocessor.transformers]
+    assert names == ["imputer", "encoder", "scaler"]
+
+
 def test_utils_render_placeholder():
     def build_test_page():
         from utils.placeholder import render_placeholder

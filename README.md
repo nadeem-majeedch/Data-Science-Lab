@@ -30,8 +30,15 @@ clean web interface. The app doubles as a teaching aid for instructors.
   (bar, frequency distribution, count plot) columns, missing-value and
   pairwise analysis, with an interpretation section that clearly labels
   automatically generated observations as educational hints
+- **Data Preprocessing** (implemented): step-by-step cleaning workflow for
+  missing values (drop or impute with mean/median/mode/constant), duplicate
+  rows, IQR outlier detection and removal, categorical encoding (one-hot /
+  label), numeric scaling (Standard/MinMax/Robust), and a train/test split.
+  Every step shows its equivalent Python code, before/after statistics are
+  compared, the cleaned dataset can be downloaded, and a reusable sklearn
+  ``ColumnTransformer`` is built - fitted on the training set only - so later
+  modeling modules transform new data without data leakage
 - Placeholder modules for the rest of the learning roadmap:
-  - Data Preprocessing
   - Feature Engineering
   - Classification
   - Regression
@@ -87,7 +94,7 @@ Data-Science-Lab/
 ├── README.md              # This file
 ├── requirements.txt       # Runtime dependencies
 ├── app.py                 # Landing page (Streamlit entry point)
-├── pages/                 # Multipage modules (10 placeholders)
+├── pages/                 # Multipage modules (3 implemented, 8 planned)
 │   ├── 1_Dataset_Explorer.py
 │   ├── 2_EDA.py
 │   ├── 3_Data_Preprocessing.py
@@ -107,6 +114,7 @@ Data-Science-Lab/
 │   ├── data_loader.py     # CSV / Excel loading (uploads + samples)
 │   ├── data_analysis.py   # Pure dataset analysis functions
 │   ├── visualization.py   # Plotly chart builders + interpretation hints
+│   ├── preprocessing.py   # Cleaning, encoding, scaling, split, pipeline
 │   └── placeholder.py     # Backwards-compatible placeholder helper
 ├── datasets/              # Data files (large files git-ignored)
 │   └── samples/           # Bundled sample datasets (CSV + XLSX)
@@ -115,7 +123,8 @@ Data-Science-Lab/
 └── tests/                 # Smoke tests
     ├── test_app.py
     ├── test_data_loader.py
-    └── test_data_analysis.py
+    ├── test_data_analysis.py
+    └── test_preprocessing.py
 ```
 
 ## Intended audience
@@ -132,9 +141,10 @@ Data-Science-Lab/
 1. **Foundation** (done): landing page, structure, and placeholders.
 2. **Dataset Explorer** (done): upload, preview, statistics, data quality.
 3. **EDA** (done): interactive visualizations to explore datasets.
-4. **Preprocessing + Feature Engineering**: cleaning, encoding, scaling.
-5. **Modeling modules**: classification, regression, clustering.
-6. **Evaluation + Comparison + AutoML**: metrics, ranking, automated search.
+4. **Preprocessing** (done): cleaning, encoding, scaling, split, pipeline.
+5. **Feature Engineering**: create and select informative features.
+6. **Modeling modules**: classification, regression, clustering.
+7. **Evaluation + Comparison + AutoML**: metrics, ranking, automated search.
 
 ## License
 
