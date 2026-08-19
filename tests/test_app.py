@@ -335,3 +335,118 @@ def test_utils_render_placeholder():
     app.run()
     assert not app.exception, app.exception
     assert app.title[0].value == "Test Module"
+
+
+def test_classification_renders_without_dataset():
+    app = _run_app(PAGES_DIR / "5_Classification.py")
+    assert not app.exception, app.exception
+    assert app.title[0].value == "Classification"
+    assert not app.metric
+
+
+def test_classification_renders_with_dataset():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "5_Classification.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    assert not app.exception, app.exception
+    labels = [metric.label for metric in app.metric]
+    assert "Rows" in labels and "Classes" in labels
+    # Default target is the first categorical column with 2-20 classes.
+    assert app.selectbox(key="clf_target").value == "subject"
+
+
+def test_classification_trains_a_model():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "5_Classification.py"), default_timeout=60)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    app.selectbox(key="clf_target").set_value("grade")
+    app.run()
+    app.button(key="clf_train").click()
+    app.run()
+
+    assert not app.exception, app.exception
+    assert app.session_state["trained_model"] is not None
+    assert app.session_state["classification_results"] is not None
+    results = app.session_state["classification_results"]
+    assert set(results["metrics"]) >= {"accuracy", "precision", "recall", "f1"}
+    assert 0.0 <= results["metrics"]["accuracy"] <= 1.0
+    assert len(results["classes"]) == 5  # A/B/C/D/F
+    assert app.session_state["trained_model_features"] is not None
+
+
+def test_classification_train_failure_is_graceful():
+    import pandas as pd
+
+    df = pd.DataFrame({"id": list(range(8)), "grade": ["A"] * 8})
+
+    app = AppTest.from_file(str(PAGES_DIR / "5_Classification.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "single_class.csv"
+    app.run()
+
+    app.selectbox(key="clf_target").set_value("grade")
+    app.run()
+
+    assert not app.exception, app.exception
+    # A single-class target renders an error and no model is trained.
+    assert any("only one class" in el.value for el in app.error)
+
+
+def test_classification_sample_row_prediction():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "5_Classification.py"), default_timeout=60)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    app.selectbox(key="clf_target").set_value("grade")
+    app.run()
+    app.button(key="clf_train").click()
+    app.run()
+
+    assert app.selectbox(key="clf_pred_row").value is not None
+    assert any(
+        "Actual class" in el.value for el in app.markdown
+    ), "expected the actual-vs-predicted comparison"
+
+
+def test_classification_custom_prediction():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "5_Classification.py"), default_timeout=60)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    app.selectbox(key="clf_target").set_value("grade")
+    app.run()
+    app.button(key="clf_train").click()
+    app.run()
+
+    app.radio(key="clf_pred_mode").set_value("Enter your own values")
+    app.run()
+
+    assert not app.exception, app.exception
+    app.button(key="clf_predict").click()
+    app.run()
+    assert not app.exception, app.exception
+    assert any(
+        "Predicted class" in el.value for el in app.success
+    ), "expected a predicted class after clicking Predict"

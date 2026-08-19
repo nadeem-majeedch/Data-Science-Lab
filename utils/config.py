@@ -177,6 +177,7 @@ MODULES: list[Module] = [
         ],
         section="Modeling",
         file="pages/5_Classification.py",
+        status="implemented",
         help_text=(
             "Choose a dataset with a categorical target, select a classifier, "
             "then train and evaluate it."

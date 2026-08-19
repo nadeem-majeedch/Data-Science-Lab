@@ -4,10 +4,9 @@ An educational, open-source web application built with **Python** and
 **Streamlit** that provides BS Data Science students with an interactive
 workspace for exploring, cleaning, modeling, and evaluating data.
 
-This repository currently contains the **project foundation**: a professional
-landing page, a modular structure, and placeholder modules for the full data
-science workflow. Machine learning functionality will be implemented in later
-milestones.
+This repository contains a growing, modular data science workspace: a landing
+page, five fully implemented modules, and placeholders for the remaining
+learning modules. Machine learning functionality is implemented incrementally.
 
 ## Project purpose
 
@@ -47,8 +46,19 @@ clean web interface. The app doubles as a teaching aid for instructors.
   itself, previews the new columns, shows its Python code, and can be undone
   or reset. When a modeling module trains a model, its feature importances
   are displayed here
+- **Classification** (implemented): train and evaluate classifiers on a
+  categorical target. Pick a target and numeric/categorical features (text
+  columns are one-hot encoded automatically), configure a leak-free
+  train/test split, and choose one of seven algorithms (logistic regression,
+  k-nearest neighbors, decision tree, random forest, naive Bayes, support
+  vector machine, gradient boosting) with tunable parameters. Results include
+  accuracy, precision, recall, F1, a per-class classification report, an
+  interactive confusion matrix, feature importances (where supported), a
+  prediction playground (sample rows or hand-entered values), and the full
+  equivalent Python code. Every algorithm ships with an explainer covering
+  why it works, its key parameters, advantages, limitations, and when to use
+  it
 - Placeholder modules for the rest of the learning roadmap:
-  - Classification
   - Regression
   - Model Evaluation
   - Clustering
@@ -102,7 +112,7 @@ Data-Science-Lab/
 ├── README.md              # This file
 ├── requirements.txt       # Runtime dependencies
 ├── app.py                 # Landing page (Streamlit entry point)
-├── pages/                 # Multipage modules (4 implemented, 7 planned)
+├── pages/                 # Multipage modules (5 implemented, 6 planned)
 │   ├── 1_Dataset_Explorer.py
 │   ├── 2_EDA.py
 │   ├── 3_Data_Preprocessing.py
@@ -124,6 +134,8 @@ Data-Science-Lab/
 │   ├── visualization.py   # Plotly chart builders + interpretation hints
 │   ├── preprocessing.py   # Cleaning, encoding, scaling, split, pipeline
 │   ├── feature_engineering.py  # Numeric/text/date features, selection, importance
+│   ├── models.py          # Classification model registry + educational content
+│   ├── model_training.py  # Leak-free pipeline training, metrics, prediction
 │   └── placeholder.py     # Backwards-compatible placeholder helper
 ├── datasets/              # Data files (large files git-ignored)
 │   └── samples/           # Bundled sample datasets (CSV + XLSX)
@@ -134,7 +146,9 @@ Data-Science-Lab/
     ├── test_data_loader.py
     ├── test_data_analysis.py
     ├── test_preprocessing.py
-    └── test_feature_engineering.py
+    ├── test_feature_engineering.py
+    ├── test_models.py
+    └── test_model_training.py
 ```
 
 ## Intended audience
@@ -153,7 +167,8 @@ Data-Science-Lab/
 3. **EDA** (done): interactive visualizations to explore datasets.
 4. **Preprocessing** (done): cleaning, encoding, scaling, split, pipeline.
 5. **Feature Engineering** (done): create, transform, bin, and select features.
-6. **Modeling modules**: classification, regression, clustering.
+6. **Modeling modules** (in progress): classification is done; regression and
+   clustering remain.
 7. **Evaluation + Comparison + AutoML**: metrics, ranking, automated search.
 
 ## License
