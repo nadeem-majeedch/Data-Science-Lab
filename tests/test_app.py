@@ -208,6 +208,119 @@ def test_preprocessing_workflow_stores_preprocessor_and_split():
     assert names == ["imputer", "encoder", "scaler"]
 
 
+def test_feature_engineering_renders_without_dataset():
+    app = _run_app(PAGES_DIR / "4_Feature_Engineering.py")
+    assert not app.exception, app.exception
+    assert app.title[0].value == "Feature Engineering"
+    assert not app.metric
+
+
+def test_feature_engineering_renders_with_dataset():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "4_Feature_Engineering.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    assert not app.exception, app.exception
+    assert len(app.metric) == 4
+    assert app.session_state["dataset_name"] == "student_grades.csv"
+
+
+def test_feature_engineering_apply_undo_reset():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "4_Feature_Engineering.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    # Apply a square transform.
+    app.selectbox(key="fe_op_type").set_value("Mathematical transformation")
+    app.run()
+    app.selectbox(key="fe_math_method").set_value("square")
+    app.multiselect(key="fe_math_cols").set_value(["midterm", "final"])
+    app.button(key="fe_apply").click()
+    app.run()
+
+    assert not app.exception, app.exception
+    ops = app.session_state["feature_ops"]
+    assert len(ops) == 1
+    assert ops[0]["key"] == "math"
+
+    # Undo removes it.
+    app.button(key="fe_undo").click()
+    app.run()
+    assert not app.exception, app.exception
+    assert app.session_state["feature_ops"] == []
+
+    # Reset is a no-op on an empty history.
+    app.button(key="fe_reset").click()
+    app.run()
+    assert not app.exception, app.exception
+    assert app.session_state["feature_ops"] == []
+
+
+def test_feature_engineering_replays_ops_onto_working_data():
+    import pandas as pd
+
+    from utils.feature_engineering import apply_feature_op
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "4_Feature_Engineering.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    # Build a chain: square midterm -> create ratio midterm/final.
+    app.selectbox(key="fe_op_type").set_value("Mathematical transformation")
+    app.run()
+    app.selectbox(key="fe_math_method").set_value("square")
+    app.multiselect(key="fe_math_cols").set_value(["midterm"])
+    app.button(key="fe_apply").click()
+    app.run()
+
+    app.selectbox(key="fe_op_type").set_value("Create numeric feature")
+    app.run()
+    app.selectbox(key="fe_num_a").set_value("midterm")
+    app.selectbox(key="fe_num_b").set_value("final")
+    app.selectbox(key="fe_num_op").set_value("ratio")
+    app.button(key="fe_apply").click()
+    app.run()
+
+    assert not app.exception, app.exception
+    ops = app.session_state["feature_ops"]
+    assert len(ops) == 2
+    # Replaying the chain must give the second op the column the first added.
+    working = df.copy()
+    for op in ops:
+        working = apply_feature_op(working, op)
+    assert "midterm_squared" in working.columns
+    assert "midterm_over_final" in working.columns
+
+
+def test_feature_importance_placeholder_when_no_model():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "4_Feature_Engineering.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    assert not app.exception, app.exception
+    assert any(
+        "No trained model available" in el.value for el in app.info
+    ), "expected the feature-importance placeholder hint"
+
+
 def test_utils_render_placeholder():
     def build_test_page():
         from utils.placeholder import render_placeholder

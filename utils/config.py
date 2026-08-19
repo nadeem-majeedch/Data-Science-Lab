@@ -155,6 +155,7 @@ MODULES: list[Module] = [
         ],
         section="Data Preparation",
         file="pages/4_Feature_Engineering.py",
+        status="implemented",
         help_text=(
             "Start from a cleaned dataset, then add new features and inspect "
             "how they change the data."

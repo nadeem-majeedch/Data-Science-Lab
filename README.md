@@ -38,8 +38,16 @@ clean web interface. The app doubles as a teaching aid for instructors.
   compared, the cleaned dataset can be downloaded, and a reusable sklearn
   ``ColumnTransformer`` is built - fitted on the training set only - so later
   modeling modules transform new data without data leakage
+- **Feature Engineering** (implemented): chainable, undoable operations that
+  enrich the dataset - new numeric features (sum/difference/product/ratio),
+  math transforms (log/sqrt/square), binning (equal width/quantile),
+  date/time extraction (year/month/day/weekday), text features (length/word
+  count), interaction and polynomial features, plus feature selection by
+  variance threshold or correlation with a target. Every operation explains
+  itself, previews the new columns, shows its Python code, and can be undone
+  or reset. When a modeling module trains a model, its feature importances
+  are displayed here
 - Placeholder modules for the rest of the learning roadmap:
-  - Feature Engineering
   - Classification
   - Regression
   - Model Evaluation
@@ -94,7 +102,7 @@ Data-Science-Lab/
 ├── README.md              # This file
 ├── requirements.txt       # Runtime dependencies
 ├── app.py                 # Landing page (Streamlit entry point)
-├── pages/                 # Multipage modules (3 implemented, 8 planned)
+├── pages/                 # Multipage modules (4 implemented, 7 planned)
 │   ├── 1_Dataset_Explorer.py
 │   ├── 2_EDA.py
 │   ├── 3_Data_Preprocessing.py
@@ -115,6 +123,7 @@ Data-Science-Lab/
 │   ├── data_analysis.py   # Pure dataset analysis functions
 │   ├── visualization.py   # Plotly chart builders + interpretation hints
 │   ├── preprocessing.py   # Cleaning, encoding, scaling, split, pipeline
+│   ├── feature_engineering.py  # Numeric/text/date features, selection, importance
 │   └── placeholder.py     # Backwards-compatible placeholder helper
 ├── datasets/              # Data files (large files git-ignored)
 │   └── samples/           # Bundled sample datasets (CSV + XLSX)
@@ -124,7 +133,8 @@ Data-Science-Lab/
     ├── test_app.py
     ├── test_data_loader.py
     ├── test_data_analysis.py
-    └── test_preprocessing.py
+    ├── test_preprocessing.py
+    └── test_feature_engineering.py
 ```
 
 ## Intended audience
@@ -142,7 +152,7 @@ Data-Science-Lab/
 2. **Dataset Explorer** (done): upload, preview, statistics, data quality.
 3. **EDA** (done): interactive visualizations to explore datasets.
 4. **Preprocessing** (done): cleaning, encoding, scaling, split, pipeline.
-5. **Feature Engineering**: create and select informative features.
+5. **Feature Engineering** (done): create, transform, bin, and select features.
 6. **Modeling modules**: classification, regression, clustering.
 7. **Evaluation + Comparison + AutoML**: metrics, ranking, automated search.
 

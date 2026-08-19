@@ -15,6 +15,12 @@ PREPROCESSOR_KEY = "preprocessor"
 
 SPLIT_KEY = "train_test_split"
 
+FEATURE_OPS_KEY = "feature_ops"
+
+TRAINED_MODEL_KEY = "trained_model"
+
+TRAINED_MODEL_FEATURES_KEY = "trained_model_features"
+
 
 def get_current_dataset():
     """Return the currently selected DataFrame, or ``None`` if none is set."""
@@ -71,3 +77,40 @@ def set_train_test_split(split: dict) -> None:
 def clear_train_test_split() -> None:
     """Remove the stored train/test split from session state."""
     st.session_state.pop(SPLIT_KEY, None)
+
+
+def get_feature_ops() -> list[dict]:
+    """Return the list of applied feature-engineering operations."""
+    return st.session_state.get(FEATURE_OPS_KEY, [])
+
+
+def set_feature_ops(ops: list[dict]) -> None:
+    """Store the applied feature-engineering operations in session state."""
+    st.session_state[FEATURE_OPS_KEY] = list(ops)
+
+
+def clear_feature_ops() -> None:
+    """Remove the feature-engineering operation history."""
+    st.session_state.pop(FEATURE_OPS_KEY, None)
+
+
+def get_trained_model():
+    """Return the fitted model trained by a modeling module, or ``None``."""
+    return st.session_state.get(TRAINED_MODEL_KEY)
+
+
+def get_trained_model_features() -> list[str] | None:
+    """Return the feature names used to train the stored model, or ``None``."""
+    return st.session_state.get(TRAINED_MODEL_FEATURES_KEY)
+
+
+def set_trained_model(model, features: list[str] | None = None) -> None:
+    """Store a fitted model and the feature names it was trained on."""
+    st.session_state[TRAINED_MODEL_KEY] = model
+    st.session_state[TRAINED_MODEL_FEATURES_KEY] = features
+
+
+def clear_trained_model() -> None:
+    """Remove the stored trained model and its feature names."""
+    st.session_state.pop(TRAINED_MODEL_KEY, None)
+    st.session_state.pop(TRAINED_MODEL_FEATURES_KEY, None)
