@@ -450,3 +450,71 @@ def test_classification_custom_prediction():
     assert any(
         "Predicted class" in el.value for el in app.success
     ), "expected a predicted class after clicking Predict"
+
+
+def test_regression_renders_without_dataset():
+    app = _run_app(PAGES_DIR / "6_Regression.py")
+    assert not app.exception, app.exception
+    assert app.title[0].value == "Regression"
+    assert not app.metric
+
+
+def test_regression_renders_with_dataset():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "6_Regression.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    assert not app.exception, app.exception
+    labels = [metric.label for metric in app.metric]
+    assert "Rows" in labels and "Values" in labels
+    # Default target is the first varying numeric column.
+    assert app.selectbox(key="reg_target").value == "attendance_pct"
+
+
+def test_regression_trains_a_model():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "6_Regression.py"), default_timeout=60)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    app.selectbox(key="reg_target").set_value("final")
+    app.run()
+    app.button(key="reg_train").click()
+    app.run()
+
+    assert not app.exception, app.exception
+    assert app.session_state["trained_model"] is not None
+    assert app.session_state["regression_results"] is not None
+    results = app.session_state["regression_results"]
+    assert set(results["metrics"]) == {"mae", "mse", "rmse", "r2"}
+    assert results["metrics"]["mse"] >= 0.0
+    assert list(results["predictions"].columns) == ["Actual", "Predicted", "Residual"]
+    assert app.get("plotly_chart"), "expected actual-vs-predicted and residual plots"
+    assert app.session_state["trained_model_features"] is not None
+
+
+def test_regression_train_failure_is_graceful():
+    import pandas as pd
+
+    df = pd.DataFrame({"grade": ["A", "B", "C", "D"], "x": [1, 2, 3, 4]})
+
+    app = AppTest.from_file(str(PAGES_DIR / "6_Regression.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "text_target.csv"
+    app.run()
+
+    # Switch to the text target -> regression validation must complain.
+    app.selectbox(key="reg_target").set_value("grade")
+    app.run()
+
+    assert not app.exception, app.exception
+    assert any("not numeric" in el.value for el in app.error)

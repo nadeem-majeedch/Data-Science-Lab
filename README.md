@@ -5,7 +5,7 @@ An educational, open-source web application built with **Python** and
 workspace for exploring, cleaning, modeling, and evaluating data.
 
 This repository contains a growing, modular data science workspace: a landing
-page, five fully implemented modules, and placeholders for the remaining
+page, six fully implemented modules, and placeholders for the remaining
 learning modules. Machine learning functionality is implemented incrementally.
 
 ## Project purpose
@@ -58,8 +58,15 @@ clean web interface. The app doubles as a teaching aid for instructors.
   equivalent Python code. Every algorithm ships with an explainer covering
   why it works, its key parameters, advantages, limitations, and when to use
   it
+- **Regression** (implemented): train and evaluate regressors on a continuous
+  numeric target. Pick a target and features (text columns are one-hot
+  encoded automatically), configure a leak-free train/test split, and choose
+  one of seven algorithms (linear, ridge, lasso, decision tree, random
+  forest, gradient boosting, KNN) with tunable parameters. Results include
+  MAE, MSE, RMSE, R2, an actual-vs-predicted scatter plot with an ideal-fit
+  line, a residual plot, an actual/predicted/residual prediction table,
+  feature importances (where supported), and the full equivalent Python code
 - Placeholder modules for the rest of the learning roadmap:
-  - Regression
   - Model Evaluation
   - Clustering
   - Model Comparison
@@ -112,7 +119,7 @@ Data-Science-Lab/
 ├── README.md              # This file
 ├── requirements.txt       # Runtime dependencies
 ├── app.py                 # Landing page (Streamlit entry point)
-├── pages/                 # Multipage modules (5 implemented, 6 planned)
+├── pages/                 # Multipage modules (6 implemented, 5 planned)
 │   ├── 1_Dataset_Explorer.py
 │   ├── 2_EDA.py
 │   ├── 3_Data_Preprocessing.py
@@ -136,6 +143,8 @@ Data-Science-Lab/
 │   ├── feature_engineering.py  # Numeric/text/date features, selection, importance
 │   ├── models.py          # Classification model registry + educational content
 │   ├── model_training.py  # Leak-free pipeline training, metrics, prediction
+│   ├── regressors.py      # Regression model registry + educational content
+│   ├── regression_training.py  # Leak-free regression training, metrics, code
 │   └── placeholder.py     # Backwards-compatible placeholder helper
 ├── datasets/              # Data files (large files git-ignored)
 │   └── samples/           # Bundled sample datasets (CSV + XLSX)
@@ -148,7 +157,9 @@ Data-Science-Lab/
     ├── test_preprocessing.py
     ├── test_feature_engineering.py
     ├── test_models.py
-    └── test_model_training.py
+    ├── test_model_training.py
+    ├── test_regressors.py
+    └── test_regression_training.py
 ```
 
 ## Intended audience
@@ -167,8 +178,8 @@ Data-Science-Lab/
 3. **EDA** (done): interactive visualizations to explore datasets.
 4. **Preprocessing** (done): cleaning, encoding, scaling, split, pipeline.
 5. **Feature Engineering** (done): create, transform, bin, and select features.
-6. **Modeling modules** (in progress): classification is done; regression and
-   clustering remain.
+6. **Modeling modules** (in progress): classification and regression are
+   done; clustering remains.
 7. **Evaluation + Comparison + AutoML**: metrics, ranking, automated search.
 
 ## License

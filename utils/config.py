@@ -199,6 +199,7 @@ MODULES: list[Module] = [
         ],
         section="Modeling",
         file="pages/6_Regression.py",
+        status="implemented",
         help_text=(
             "Choose a dataset with a numeric target, pick a regressor, and "
             "train it to inspect its predictions."
