@@ -518,3 +518,162 @@ def test_regression_train_failure_is_graceful():
 
     assert not app.exception, app.exception
     assert any("not numeric" in el.value for el in app.error)
+
+
+def test_model_evaluation_renders_without_dataset():
+    app = _run_app(PAGES_DIR / "7_Model_Evaluation.py")
+    assert not app.exception, app.exception
+    assert app.title[0].value == "Model Evaluation"
+    assert not app.metric
+
+
+def test_model_evaluation_renders_without_trained_model():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "7_Model_Evaluation.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    assert not app.exception, app.exception
+    assert any("No trained model found" in el.value for el in app.info)
+
+
+def test_model_evaluation_shows_classification_results():
+    import pandas as pd
+    from sklearn.linear_model import LogisticRegression
+
+    from utils.model_training import train_classifier
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+    features = ["attendance_pct", "midterm", "final", "subject"]
+    results = train_classifier(
+        df[features],
+        df["grade"],
+        LogisticRegression(max_iter=1000),
+        random_state=42,
+        stratify=True,
+    )
+    results["config"] = {
+        "model_key": "Logistic Regression",
+        "params": {"max_iter": 1000, "C": 1.0},
+        "target": "grade",
+        "features": features,
+        "test_size": 0.2,
+        "random_state": 42,
+        "stratify": True,
+    }
+
+    app = AppTest.from_file(str(PAGES_DIR / "7_Model_Evaluation.py"), default_timeout=120)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.session_state["classification_results"] = results
+    app.run()
+
+    assert not app.exception, app.exception
+    assert any(el.value.startswith("Evaluating") for el in app.subheader)
+    assert app.get("plotly_chart"), "expected ROC and confusion-matrix charts"
+    assert app.get("download_button"), "expected a CSV download button"
+
+
+def test_model_evaluation_shows_regression_results():
+    import pandas as pd
+    from sklearn.linear_model import LinearRegression
+
+    from utils.regression_training import train_regressor
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+    features = ["attendance_pct", "midterm", "final", "subject"]
+    results = train_regressor(df[features], df["final"], LinearRegression(), random_state=42)
+    results["config"] = {
+        "model_key": "Linear Regression",
+        "params": {"fit_intercept": True},
+        "target": "final",
+        "features": features,
+        "test_size": 0.2,
+        "random_state": 42,
+    }
+
+    app = AppTest.from_file(str(PAGES_DIR / "7_Model_Evaluation.py"), default_timeout=120)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.session_state["regression_results"] = results
+    app.run()
+
+    assert not app.exception, app.exception
+    assert any(el.value.startswith("Evaluating") for el in app.subheader)
+    assert app.get("plotly_chart"), "expected residual charts"
+    assert app.get("download_button"), "expected a CSV download button"
+
+
+def test_model_comparison_renders_without_dataset():
+    app = _run_app(PAGES_DIR / "9_Model_Comparison.py")
+    assert not app.exception, app.exception
+    assert app.title[0].value == "Model Comparison"
+    assert not app.metric
+
+
+def test_model_comparison_renders_with_dataset():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "9_Model_Comparison.py"), default_timeout=30)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    assert not app.exception, app.exception
+    labels = [metric.label for metric in app.metric]
+    assert "Rows" in labels
+    # Default task is classification -> default target is a categorical column.
+    assert app.selectbox(key="cmp_target").value == "subject"
+
+
+def test_model_comparison_classification():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "9_Model_Comparison.py"), default_timeout=180)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    app.selectbox(key="cmp_target").set_value("grade")
+    app.run()
+    app.button(key="cmp_compare").click()
+    app.run()
+
+    assert not app.exception, app.exception
+    results = app.session_state["comparison_results"]
+    assert list(results["table"].columns) == ["Model", "Accuracy", "Precision", "Recall", "F1", "AUC"]
+    assert len(results["table"]) == 7
+    assert results["table"]["AUC"].notna().all()
+    assert app.get("download_button"), "expected a CSV download button"
+
+
+def test_model_comparison_regression():
+    import pandas as pd
+
+    df = pd.read_csv(PROJECT_ROOT / "datasets" / "samples" / "student_grades.csv")
+
+    app = AppTest.from_file(str(PAGES_DIR / "9_Model_Comparison.py"), default_timeout=180)
+    app.session_state["dataset"] = df
+    app.session_state["dataset_name"] = "student_grades.csv"
+    app.run()
+
+    app.radio(key="cmp_task").set_value("Regression")
+    app.run()
+    app.selectbox(key="cmp_target").set_value("final")
+    app.run()
+    app.button(key="cmp_compare").click()
+    app.run()
+
+    assert not app.exception, app.exception
+    results = app.session_state["comparison_results"]
+    assert list(results["table"].columns) == ["Model", "MAE", "RMSE", "R2"]
+    assert len(results["table"]) == 7
+    assert app.get("download_button"), "expected a CSV download button"

@@ -11,6 +11,7 @@ supplied by the caller - is **fitted on the training set only** and then
 applied unchanged to the test set, so the evaluation is honest.
 """
 
+import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
@@ -246,24 +247,38 @@ def train_classifier(
     }
 
 
+def _positive_label(y_true, y_pred):
+    """Return the positive class label for a binary problem.
+
+    Uses the second label in sorted order (``1`` for numeric 0/1 targets,
+    the lexicographically-second label for string targets), matching how
+    ``predict_proba`` and AUC treat column index 1 as the positive class.
+    """
+    labels = sorted(
+        set(np.asarray(y_true).tolist()) | set(np.asarray(y_pred).tolist())
+    )
+    return labels[1] if len(labels) >= 2 else None
+
+
 def classification_metrics(y_true, y_pred, n_classes: int | None = None) -> dict:
     """Return accuracy, precision, recall and F1.
 
-    Binary problems use the standard binary averages; multi-class problems use
-    macro averages (each class weighted equally, regardless of size).
+    Binary problems use the standard binary averages (the positive class is
+    the second sorted label, so both numeric ``0/1`` and string targets such
+    as ``no``/``yes`` work); multi-class problems use macro averages (each
+    class weighted equally, regardless of size).
     """
     if n_classes is None:
         n_classes = len(set(y_true))
     average = "binary" if n_classes == 2 else "macro"
+    kwargs = {"average": average, "zero_division": 0}
+    if average == "binary":
+        kwargs["pos_label"] = _positive_label(y_true, y_pred)
     return {
         "accuracy": float(accuracy_score(y_true, y_pred)),
-        "precision": float(
-            precision_score(y_true, y_pred, average=average, zero_division=0)
-        ),
-        "recall": float(
-            recall_score(y_true, y_pred, average=average, zero_division=0)
-        ),
-        "f1": float(f1_score(y_true, y_pred, average=average, zero_division=0)),
+        "precision": float(precision_score(y_true, y_pred, **kwargs)),
+        "recall": float(recall_score(y_true, y_pred, **kwargs)),
+        "f1": float(f1_score(y_true, y_pred, **kwargs)),
         "average": average,
     }
 

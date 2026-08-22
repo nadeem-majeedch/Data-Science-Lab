@@ -223,6 +223,7 @@ MODULES: list[Module] = [
         ],
         section="Evaluation",
         file="pages/7_Model_Evaluation.py",
+        status="implemented",
         help_text=(
             "Run an evaluation on a trained model and explore each metric to "
             "understand what it tells you."
@@ -265,6 +266,7 @@ MODULES: list[Module] = [
         ],
         section="Evaluation",
         file="pages/9_Model_Comparison.py",
+        status="implemented",
         help_text=(
             "Select the models you want to compare, then review the ranking "
             "table and charts."
